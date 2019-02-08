@@ -2,6 +2,7 @@
 using System.Data;
 using System.Text;
 using System.Data.SqlClient;
+using DalLayout.Retry;
 
 namespace DalLayout.Dapper
 {
@@ -16,9 +17,17 @@ namespace DalLayout.Dapper
             Connection.Open();
         }
 
-        public NativeDbContext(string connectionName)
+        public NativeDbContext(string connectionName, bool usePolicy)
         {
-            Connection = new SqlConnection(connectionName);
+            if (usePolicy)
+            {
+                Connection = new ReliableSqlDbConnection(connectionName, new DatabaseCommunicationRetryPolicy());
+            }
+            else
+            {
+                Connection = new SqlConnection(connectionName);
+            }
+
             Connection.Open();
         }
 
