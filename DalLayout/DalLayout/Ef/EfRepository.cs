@@ -151,20 +151,20 @@ namespace DalLayout.Ef
 
         public void NativeSql(string sql, params object[] parameters)
         {
-            _context.Database.ExecuteSqlCommand(sql, parameters);
+            _context.Database.ExecuteSqlRaw(sql, parameters);
         }
 
         public async Task NativeSqlAsync(string sql, params object[] parameters)
         {
-            await _context.Database.ExecuteSqlCommandAsync(sql, parameters);
+            await _context.Database.ExecuteSqlRawAsync(sql, parameters);
         }
 
         public string GetTableName()
         {
-            var data = _context.Model.FindEntityType(typeof(TEntity)).Relational();
-            return string.IsNullOrEmpty(data.Schema)
-                ? $"[dbo].[{data.TableName}]"
-                : $"[{data.Schema}].[{data.TableName}]";
+            var entityType = _context.Model.FindEntityType(typeof(TEntity));
+            return string.IsNullOrEmpty(entityType.GetSchema())
+                ? $"[dbo].[{entityType.GetTableName()}]"
+                : $"[{entityType.GetSchema()}].[{entityType.GetTableName()}]";
         }
 
         public List<TEntity> All()

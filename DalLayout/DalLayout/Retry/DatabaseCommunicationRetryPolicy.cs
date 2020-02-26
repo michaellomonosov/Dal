@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
+using Polly;
+using Polly.Retry;
+using System;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Polly;
 
 namespace DalLayout.Retry
 {
@@ -14,9 +13,9 @@ namespace DalLayout.Retry
         private const int RetryCount = 3;
         private const int WaitBetweenRetriesInMilliseconds = 1000;
         private readonly int[] _sqlExceptions = new[] { 53, -2 };
-        private readonly Policy _retryPolicyAsync;
+        private readonly AsyncRetryPolicy _retryPolicyAsync;
         private readonly Policy _retryPolicy;
-
+        //add PolicyWrap
         public DatabaseCommunicationRetryPolicy()
         {
             _retryPolicyAsync = Policy

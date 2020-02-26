@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Data;
 using System.Text;
-using System.Data.SqlClient;
 using DalLayout.Retry;
+using Microsoft.Data.SqlClient;
 
 namespace DalLayout.Dapper
 {
